@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Login and Registration</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{%static 'login/css/style_registration.css'%}">
+</head>
+<body>
+	<div class="registration">
+		<h2>Edit {{user.firstName}}'s Profile</h2>
+		<form action="{% url 'login:update' id=user.id %}" method="post">
+			{% csrf_token %}
+			<label>First Name:<input name="f_name" type="text" value="{{user.firstName}}"></label>
+			<label>Last Name:<input name="l_name" type="text" value="{{user.lastName}}"></label>
+			<div id="maidenDiv">
+				<label>Maiden Name:<input name="m_name" type="text" value="{{user.maidenName}}" placeholder="(Optional)"></label>
+			</div>
+			<label for="reg_email">Email: <input name="reg_email" type="email" value="{{user.email}}"></label>
+			<label>Zip Code:<input name="zipC" value="{{user.zipC}}">
+			</label>
+			<label>Birthdate:<input id="birthdate" name="birthdate" type="date" value="{{birthday}}"></label>
+
+			<input id="reg_submit" type="submit" value="Update Profile">
+		</form>
+		<a href="/user/show">Cancel</a>
+			<h4 class= "validation_message">{{request.session.validate}}</h4>
+			<script type="text/javascript">
+			function birthdayConvert(birthday){
+				console.log ("birthday is: ", birthday);
+				console.log ("THEN birthday is: ", birthday.toString());
+				return birthday.toString();
+			}
+
+			</script>
+	</div>
+</body>
+</html>

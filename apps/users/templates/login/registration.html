@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Login and Registration</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{%static 'login/css/style_registration.css'%}">
+	
+</head>
+<body>
+	<div class="registration">
+		<a href="{% url 'login:index' %}">Back to Login Page</a>
+		<h2>Registration</h2>
+
+		<form action="{% url 'login:register' %}" method="post">
+			{% csrf_token %}
+			<label>First Name:<input name="f_name" type="text" value="{{request.session.fname}}"></label>
+			<label>Last Name:<input name="l_name" type="text" value="{{request.session.lname}}"></label>
+			<div id="maidenDiv">
+				<label>Maiden Name:<input name="m_name" type="text" value="{{request.session.mname}}" placeholder="(Optional)"></label>
+			</div>
+			<label>Password: <input name="reg_pw" type="password"></label>
+			<label>Confirm PW:<input name="conf_reg_pw" type="password"></label>
+			<label for="reg_email">Email: <input name="reg_email" type="email" value="{{request.session.valEmail}}"></label>
+			<label>Zip Code:<input name="zipC" value="{{request.session.zipC}}">
+			</label>
+			<label>Birthdate:<input id="birthdate" name="birthdate" type="date" value="{{request.session.birthday}}"></label>
+
+			<input id="reg_submit" type="submit" value="Register">
+		</form>
+			<h4 class= "validation_message">{{request.session.validate}}</h4>
+	</div>
+	
+
+		<p id="belowInfo" >Registered Fake Emails Below:</p>
+		
+		{% for user in users%}
+
+			<p>{{user.email}}</p>
+			{% if user.id == request.session.userID %}
+				<a href="{% url 'login:delete' id=user.id %}">Delete</a>
+			{% endif %}
+			<p>******</p>
+
+		{% endfor%}
+
+</body>
+</html>

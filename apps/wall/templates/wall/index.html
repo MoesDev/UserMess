@@ -1,0 +1,60 @@
+<html>
+<head>
+	<title>Code Test for Service Fusion</title>
+	<meta charset = "utf-8">
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'wall/css/style.css' %}">
+</head>
+<body>
+
+	<div id= "top_box">
+		<h2>Code Test for Service Fusion by Monet Harkin</h2>
+		{% if request.session.userID > 0 %}
+			<h4>Welcome {{user.firstName}}!</h4>
+			<a href="/user/show">Profile Info</a>
+			<a href="/signout">log off</a>
+			<p> Write a new message or make a comment on a message</h4> </p>
+		{% endif %}
+	</div>
+	<div id= "post_message_box">
+		{% if request.session.userID > 0 %}
+			<form action="{% url 'wall:message' %}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="hidden" value="message">
+				<label for="mess_box">Post a message
+				<textarea rows="4" id= "mess_box" name="message" placeholder="Enter message here..."></textarea></label>
+				<input type="submit" value="Post a message">
+			</form>
+		{% else %}
+			<h3><a href="{% url 'login:index' %}">Login to post Messages or Comments</a></h3>
+		{% endif %}
+	</div>
+	<div id= "messages_box">
+		{% for message in messages %}
+			<h4>{{message.user.firstName}} - {{ message.created_at }}</h4>
+			<p class="message" name="message_text">{{ message.message }}</p>
+
+			{% for comment in message.comment_set.all %}
+				<div class="commentsFormat">
+					<h5>{{comment.user.firstName}} - {{ comment.created_at }}</h5>
+					<p class="comment">{{ comment.comment }}</p>
+					{% if request.session.userID == comment.user.id %}
+						<a href="{% url 'wall:comment_delete' id=comment.id %}">Delete Comment</a>
+					{% endif %}
+				</div>
+			{% endfor %}
+			{% if request.session.userID > 0 %}
+				<div class="commentsFormat">
+					<form action="{% url 'wall:comment' id=message.id %}" method="POST">
+						{% csrf_token %}
+						<label for="comment">Post a Comment: <textarea id="comment" name="comment" row="3"></textarea></label>
+						
+						<input type="submit" value="Comment">
+					</form>
+				</div>
+			{% endif %}
+		{% endfor %}
+</div>
+
+</body>
+</html>

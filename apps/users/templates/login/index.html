@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Code Test for Service Fusion</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{%static 'login/css/style_registration.css'%}">
+
+</head>
+<body>
+	<h2>Code Test for Service Fusion by Monet Harkin</h2>
+	
+	<a href="{% url 'wall:index' %}" style="display:block;">Posts and Comments</a>
+
+	<div id="login" style="display:inline-block; border: 1px solid black; padding: 10px; margin: 20px 0;">
+		<h2>Login</h2>
+		<form action="{% url 'login:login' %}" method="post">
+			{% csrf_token %}
+			<label>Email: <input name="login_email" type="text" value="{{request.session.loginEmail}}"></label>
+			<label>Password: <input name="login_password" type="password"></label>
+			<input id="login_submit" type="submit" value="Login">
+		</form>
+		<p> </p>
+		<a href="{% url 'login:regPage' %}">New User Register Here</a>
+
+		{% for message in messages %}
+			{% if message.extra_tags == "loginError" %}
+			 <h4 class= "validation_message">{{message.message}}</h4>
+			 <a href="{% url 'login:regPage' %}">Click here if you're a new user</a>
+			{% endif %}
+		{% endfor %}
+		
+	</div>
+
+	<div>
+		<p id="belowInfo" >Registered Fake Names and Fake Emails Below:</p>
+			
+		{% for user in users%}
+
+			<p>{{user.firstName}} {{user.lastName}}</p>
+			<p>{{user.email}}</p>
+			{% if user.id == request.session.userID %}
+				<a href="{% url 'login:delete' id=user.id %}">Delete</a>
+			{% endif %}
+			<p>******</p>
+
+		{% endfor%}
+	</div>
+
+</body>
+</html>

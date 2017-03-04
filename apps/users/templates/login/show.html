@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Login and Registration</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{%static 'login/css/style_registration.css'%}">
+
+	<style type="text/css">
+		input{
+			border: none;
+		}
+	</style>
+
+</head>
+<body>
+
+	<div class="registration">
+		<h2>{{user.firstName}}'s Profile Info</h2>
+		<form action="{% url 'login:register' %}" method="post">
+			{% csrf_token %}
+			<label>First Name:<input name="f_name" type="text" value="{{user.firstName}}"></label>
+			<label>Last Name:<input name="l_name" type="text" value="{{user.lastName}}"></label>
+			{% if user.maidenName != "" %}
+			<div id="maidenDiv">
+				<label>Maiden Name:<input name="m_name" type="text" value="{{user.maidenName}}" ></label>
+			</div>
+			{% endif %}
+			<label for="reg_email">Email: <input name="reg_email" type="email" value="{{user.email}}"></label>
+			<label>Zip Code:<input name="zipC" value="{{user.zipC}}">
+			</label>
+			<label>Birthdate:<input id="birthdate" name="birthdate" type="text" value="{{user.birthday}}"></label>
+		</form>
+
+		<a href="{% url 'login:edit' id=user.id %}">Edit Profile</a>
+		<a href="/signout">Log Out</a>
+		<p></p>
+		{% if user.id == request.session.userID %}
+			<a href="{% url 'login:delete' id=user.id %}">Delete Profile</a>
+		{% endif %}
+	</div>
+	<a href="{% url 'wall:index' %}">Posts and Comments</a>
+
+</body>
+</html>
