@@ -7,9 +7,11 @@ import bcrypt
 def index(request):
 	users = User.usermanager.all()
 	print "This is the userID session: "
+	if 'userID' not in request.session:
+		request.session['userID']= 0;
 	print request.session['userID']
 	context={"users": users}
-	return render(request, "login\index.html", context)
+	return render(request, "login/index.html", context)
 
 def show(request):
 	print "This is the userID showwwwww: "
@@ -17,7 +19,7 @@ def show(request):
 	user = User.usermanager.get(id=request.session['userID'])
 	if user:
 		context = { "user" : user}
-		return render(request, "login\show.html", context)
+		return render(request, "login/show.html", context)
 	else:
 		return redirect('login:not_signed_in')
 
@@ -30,7 +32,7 @@ def edit(request, id):
 	if request.session['userID'] != 0:
 		print "user is still logged in"
 		context = { "user" : user, "birthday" : bday}
-		return render(request, "login\edit.html", context)
+		return render(request, "login/edit.html", context)
 	else:
 		return redirect('login:not_signed_in')
 
@@ -50,7 +52,7 @@ def update(request, id):
 		return redirect('login:show')
 	else:
 		context = { "user" : user}
-		return render(request, "login\edit.html", context)
+		return render(request, "login/edit.html", context)
 
 
 def registrationPage(request):
